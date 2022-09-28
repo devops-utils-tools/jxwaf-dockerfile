@@ -12,7 +12,7 @@ data:
   DB_PORT: "3308"
   DB_NAME: "jxwaf_db"
   DB_USER: "test"
-  DB_PASS: "xPBMsuV8lhGUe27rWmZ9gCdQm8n36sQQEsFMqgTxiRr9ZyodD0tldqrOjrmkFdnO"
+  DB_PASS: "XXXXXPASS"
 ---
 apiVersion: v1
 kind: Service

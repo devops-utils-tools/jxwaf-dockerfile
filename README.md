@@ -3,6 +3,7 @@
 #### jxwaf-server/ Jxwaf-manage DockerFile 
 #### jxwaf-node/ Jxwaf-node DockerFile
 #### api/ api记录 User_Cookice登陆后自行抓取
+#### k8s/ k8s 部署yanl文件
 #### 相关源码包
 
 ```shell
