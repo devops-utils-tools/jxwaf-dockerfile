@@ -41,7 +41,7 @@ docker run -d --restart always --name ${Node_Name} --hostname ${Node_Name} \
     -e DB_PORT="3306" \
     -e DB_NAME="jxwaf_db" \
     -e DB_USER="root" \
-    -e DB_PASS="bUHvZJ9rzprE4dyzkJ0kkGw7EhRP3IprJ7yU9GmFZ5x3YOMogCMnnpqah0KoVbfJ" \
+    -e DB_PASS="XXXXPASS" \
     -v /dev:/dev:ro \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${Data_Path}/jxwaf-server:/opt/jxwaf-server \
