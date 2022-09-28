@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jxwafnode
+  labels:
+    app.kubernetes.io/name: jxwafnode
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jxwafnode
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jxwafnode
+    spec:
+      hostNetwork: true
+      replicas: 3
+      containers:
+        - name: jxwafnode
+          image: hub.wusong.com/library/devopsutilstools/jxwaf-node:v2022
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 80
+          readinessProbe:
+            tcpSocket:
+              port: 443
+          env:
+            - name: ENV_INIT
+              value: "--api_key=4c9f506d-303a-40eb-a9a1-16f8253f0aae --api_password=3ee36ee9-2dd0-4d9b-84c7-f5dc5032dcaa --waf_server=http://192.168.25.105:36915"
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - "sleep 180"
+      nodeSelector:
+        jxwafnode: jxwafnode
+#kubectl label nodes 192.168.25.107 192.168.25.108 192.168.25.109 jxwafnode=jxwafnode

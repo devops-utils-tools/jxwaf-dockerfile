@@ -1,0 +1,95 @@
+#kubectl label nodes 192.168.25.107 192.168.25.108 192.168.25.109 jxwafserver=jxwafserver
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jxwafserver
+  labels:
+    app.kubernetes.io/name: jxwafserver
+data:
+  #数据库配置
+  DB_HOST: "192.168.25.219"
+  DB_PORT: "3308"
+  DB_NAME: "jxwaf_db"
+  DB_USER: "test"
+  DB_PASS: "xPBMsuV8lhGUe27rWmZ9gCdQm8n36sQQEsFMqgTxiRr9ZyodD0tldqrOjrmkFdnO"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jxwafserver
+  annotations:
+  labels:
+    app.kubernetes.io/name: jxwafserver
+spec:
+  type: NodePort
+  ports:
+  - name: jxwafserver
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: jxwafserver
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jxwafserver
+  labels:
+    app.kubernetes.io/name: jxwafserver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jxwafserver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jxwafserver
+    spec:
+      
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: jxwafserver
+            topologyKey: kubernetes.io/hostname
+      nodeSelector:
+        jxwafserver: jxwafserver
+      containers:
+        - name: jxwafserver
+          image: hub.wusong.com/library/devopsutilstools/jxwaf-server:v2022
+          imagePullPolicy: IfNotPresent
+          envFrom:
+          - configMapRef:
+              name: jxwafserver
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - "sleep 45"
+          resources:
+            limits:
+              cpu: 2048m
+              memory: 4096Mi
+            requests:
+              cpu: 512m
+              memory: 2048Mi
+
