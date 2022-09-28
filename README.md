@@ -4,15 +4,15 @@
 ## jxwaf-node/ Jxwaf-node DockerFile
 ## 相关源码包
 
-
+```shell
 curl -O -sfkL https://github.com/jx-sec/jxwaf-mini-server/archive/refs/tags/RC2.tar.gz
 curl -O -sfkL https://github.com/jx-sec/jxwaf/archive/refs/tags/jxwaf2022-RC2.tar.gz
-
+```
 
 ### Jxwaf-Server
 ### 替换mysql数据库相关信息
 
-
+```shell
 export Server_Port=8080
 export Node_Name=Jxwaf-Server_Mysql
 export Data_Path=/data/docker_${Node_Name}
@@ -44,12 +44,12 @@ docker run -d --restart always --name ${Node_Name} --hostname ${Node_Name} \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${Data_Path}/jxwaf-server:/opt/jxwaf-server \
 ${IMAGE_TAG}
-
+```
 ### Jxwaf-Node
 ### 替换ENV_INIT相关信息 Jxwaf-manage 信息
 
 
-
+```shell
 export Node_Name=Jxwaf-Node
 export Data_Path=/data/docker_${Node_Name}
 export IMAGE_TAG=hub.wusong.com/library/devopsutilstools/jxwaf-node:v2022
@@ -74,4 +74,4 @@ docker run -d --restart always --name ${Node_Name} --hostname ${Node_Name} \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${Data_Path}/jxwaf:/opt/jxwaf \
 ${IMAGE_TAG}
-
+```
