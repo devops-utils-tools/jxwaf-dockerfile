@@ -1,5 +1,7 @@
 FROM debian:stable-slim
 ENV DEBIAN_FRONTEND noninteractive
+ARG VERSION="RC3"
+ENV DOWN_SERVER=http://192.168.25.219
 RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
     cp /etc/apt/sources.list /etc/apt/sources.list.default &&\
     sed -i 's@archive.ubuntu.com@mirrors.163.com@g' /etc/apt/sources.list &&\
@@ -15,9 +17,8 @@ RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localt
     curl -sfkL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py &&\
     python2.7 get-pip.py &&\
     pip2 install -r http://192.168.25.219/index.html/waf/jxwaf/requirements.txt &&\
-    pip2 install django-sslserver==0.18 &&\
     mkdir -p /usr/local/jxwaf-server &&\
-    curl -sfkL http://192.168.25.219/index.html/waf/jxwaf/RC2.tar.gz|tar xzf - -C /usr/local/jxwaf-server --strip-components=1 &&\
+    curl -sfkL ${DOWN_SERVER}/waf/jxwaf/${VERSION}.tar.gz|tar xzf - -C /usr/local/jxwaf-server --strip-components=1 &&\
     localedef -c -f UTF-8 -i zh_CN zh_CN.UTF-8 &&\
     mkdir -p  /usr/local/mysql-client &&\ 
     curl -sfkL http://192.168.25.219/mysql/mysql-client-8.0.25-15.tar.gz |tar xzf - -C /usr/local/mysql-client --strip-components=1 &&\

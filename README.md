@@ -7,8 +7,8 @@
 #### 相关源码包
 
 ```shell
-curl -O -sfkL https://github.com/jx-sec/jxwaf-mini-server/archive/refs/tags/RC2.tar.gz
-curl -O -sfkL https://github.com/jx-sec/jxwaf/archive/refs/tags/jxwaf2022-RC2.tar.gz
+curl -O -sfkL https://github.com/jx-sec/jxwaf-mini-server/archive/refs/tags/RC3.tar.gz
+curl -O -sfkL https://github.com/jx-sec/jxwaf/archive/refs/tags/jxwaf2022-RC3.tar.gz
 ```
 
 ### Jxwaf-Server
@@ -18,7 +18,7 @@ curl -O -sfkL https://github.com/jx-sec/jxwaf/archive/refs/tags/jxwaf2022-RC2.ta
 export Server_Port=8080
 export Node_Name=Jxwaf-Server_Mysql
 export Data_Path=/data/docker_${Node_Name}
-export IMAGE_TAG=hub.wusong.com/library/devopsutilstools/jxwaf-server:v2022
+export IMAGE_TAG=hub.wusong.com/library/devopsutilstools/jxwaf-server:RC3
 docker pull ${IMAGE_TAG}
 docker images ${IMAGE_TAG}
 docker stop ${Node_Name} &>/dev/null
@@ -54,7 +54,7 @@ ${IMAGE_TAG}
 ```shell
 export Node_Name=Jxwaf-Node
 export Data_Path=/data/docker_${Node_Name}
-export IMAGE_TAG=hub.wusong.com/library/devopsutilstools/jxwaf-node:v2022
+export IMAGE_TAG=hub.wusong.com/library/devopsutilstools/jxwaf-node:2022-RC3
 docker pull ${IMAGE_TAG}
 
 docker stop ${Node_Name} &>/dev/null

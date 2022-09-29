@@ -1,5 +1,7 @@
 FROM debian:stable-slim
 ENV DEBIAN_FRONTEND noninteractive
+ARG VERSION="2022-RC2"
+ENV DOWN_SERVER=http://192.168.25.219
 RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
     cp /etc/apt/sources.list /etc/apt/sources.list.default &&\
     sed -i 's@archive.ubuntu.com@mirrors.163.com@g' /etc/apt/sources.list &&\
@@ -16,7 +18,7 @@ RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localt
     python2.7 get-pip.py &&\
     pip2 install requests==2.27.1 &&\
     mkdir -p /tmp/jxwaf-node &&\
-    curl -sfkL http://192.168.25.219/index.html/waf/jxwaf/jxwaf2022-RC2.tar.gz|tar xzf - -C /tmp/jxwaf-node --strip-components=1 &&\
+    curl -sfkL ${DOWN_SERVER}/waf/jxwaf/jxwaf${VERSION}.tar.gz|tar xzf - -C /tmp/jxwaf-node --strip-components=1 &&\
     cd /tmp/jxwaf-node/ &&\
     tar zxvf openresty-1.21.4.1.tar.gz  &&\
     cd openresty-1.21.4.1  &&\
