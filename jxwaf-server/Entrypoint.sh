@@ -11,11 +11,7 @@ echo ----------------------------------------------- init db -------------------
     show tables; \
     " 2>/dev/null
 echo -------------------------------------------------------------------------------------------------------
-
 }
-/usr/local/mysql-client/bin/mysql -u${DB_USER} -h${DB_HOST} -P ${DB_PORT} --password="${DB_PASS}" -e "\
-    use ${DB_NAME};show tables;\
-    "&>/dev/null ||mysql_db_init
 
 #jxwaf config
 jxwafconfig(){
@@ -70,7 +66,7 @@ $(if [[ "${DB_ENGINE:-"sqlite3"}" != "mysql" ]];then
     echo "   'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),"
     echo "    }"
     echo "}"
-else 
+else
     echo "DATABASES = {"
     echo "    'default': {"
     echo "        'ENGINE': 'django.db.backends.mysql',"
@@ -113,12 +109,32 @@ rm -rf /tmp/chowndir &>/dev/null
 
 #init server
 if [ ! -e "/opt/jxwaf-server/.init" ];then
-   cp -a /usr/local/jxwaf-server /opt/
-   cd /opt/jxwaf-server
-   jxwafconfig
-   python2 manage.py makemigrations
-   python2 manage.py migrate
-   touch /opt/jxwaf-server/.init
+    cp -a /usr/local/jxwaf-server /opt/
+    cd /opt/jxwaf-server
+    jxwafconfig
+    touch /opt/jxwaf-server/.init
+
+    #初始化数据库
+    if [[ "${DB_ENGINE:-"sqlite3"}" == "mysql" ]];then
+        #mysql初始化
+        #判断用户是否存在 没有存在初始化mysql数据库
+        export User_Count=$(/usr/local/mysql-client/bin/mysql -u${DB_USER} -h${DB_HOST} -P ${DB_PORT} --skip-column-names --silent --raw  --password="${DB_PASS}" -e "\
+            SELECT COUNT(*) FROM ${DB_NAME}.server_jxwaf_user;\
+            " 2>/dev/null)
+        if [ "${User_Count}" -lt 1 ];then
+            echo "mysql db init"
+            mysql_db_init;
+            python2 manage.py makemigrations
+            python2 manage.py migrate
+        fi
+    else
+        #sqlite3 初始化
+        echo "sqlite3 db init"
+        python2 manage.py makemigrations
+        python2 manage.py migrate
+    fi
+
+
 fi
 
 #start

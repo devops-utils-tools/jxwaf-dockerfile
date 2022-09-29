@@ -1,7 +1,7 @@
 # Jxwaf docker
 
-#### jxwaf-server/ Jxwaf-manage DockerFile 
-#### jxwaf-node/ Jxwaf-node DockerFile
+#### jxwaf-server/ Jxwaf-manage DockerFile "bash build.sh RC3"
+#### jxwaf-node/ Jxwaf-node DockerFile  "bash build.sh 2022-RC3"
 #### api/ api记录 User_Cookice登陆后自行抓取
 #### k8s/ k8s 部署yanl文件
 #### 相关源码包

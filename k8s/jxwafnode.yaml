@@ -5,20 +5,22 @@ metadata:
   labels:
     app.kubernetes.io/name: jxwafnode
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: jxwafnode
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app.kubernetes.io/name: jxwafnode
     spec:
       hostNetwork: true
-      replicas: 3
       containers:
         - name: jxwafnode
-          image: hub.wusong.com/library/devopsutilstools/jxwaf-node:v2022
-          imagePullPolicy: IfNotPresent
+          image: hub.wusong.com/library/devopsutilstools/jxwaf-node:2022-RC3
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -34,7 +36,7 @@ spec:
               port: 443
           env:
             - name: ENV_INIT
-              value: "--api_key=4c9f506d-303a-40eb-a9a1-16f8253f0aae --api_password=3ee36ee9-2dd0-4d9b-84c7-f5dc5032dcaa --waf_server=http://192.168.25.105:36915"
+              value: "--api_key=c089bd81-b8e8-480c-ba90-8451d4096b06 --api_password=8f712e10-cc3f-4c71-b2c8-76049d6b20aa --waf_server=http://192.168.25.105:8080"
           lifecycle:
             preStop:
               exec:
@@ -42,6 +44,14 @@ spec:
                 - /bin/sh
                 - -c
                 - "sleep 180"
+          resources:
+            limits:
+              cpu: 2048m
+              memory: 4096Mi
+            requests:
+              cpu: 512m
+              memory: 2048Mi
       nodeSelector:
         jxwafnode: jxwafnode
-#kubectl label nodes 192.168.25.107 192.168.25.108 192.168.25.109 jxwafnode=jxwafnode
+# kubectl label nodes 192.168.25.107 192.168.25.108 192.168.25.109 jxwafnode=jxwafnode
+# kubectl set image --namespace jxwaf deployments jxwafnode jxwafnode=hub.wusong.com/library/devopsutilstools/jxwaf-node:2022-RC3
